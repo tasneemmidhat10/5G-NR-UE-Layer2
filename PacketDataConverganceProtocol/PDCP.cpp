@@ -146,7 +146,7 @@ std::vector<uint8_t> PdcpUplink::pdcpCipher(const std::vector<uint8_t>& input, i
     }
 
     // Initialize IV
-    unsigned char iv[6] = {0};  // Ensure the full IV is zeroed
+    unsigned char iv[16] = {0};  // Ensure the full IV is zeroed
     memcpy(iv, &TX_NEXT, 4);     // Copy only 4 bytes from TX_NEXT
     std::printf("\nIV:\n");
     for (int i = 0; i < 16; i++) {
@@ -295,7 +295,7 @@ std::vector<uint8_t> PdcpDownlink::pdcpCipherDownlink(const std::vector<uint8_t>
     }
 
     // Prepare IV
-    unsigned char iv[6] = {0};  // Ensure the full IV is zeroed
+    unsigned char iv[16] = {0};  // Ensure the full IV is zeroed
     memcpy(iv, &RX_NEXT, 4);     // Copy only 4 bytes from RX_NEXT
     std::printf("\nThe IV VECTOR: %d %d\n", iv[0], iv[15]);
     std::printf("\nIV:\n");

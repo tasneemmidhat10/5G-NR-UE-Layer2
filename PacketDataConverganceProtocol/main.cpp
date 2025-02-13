@@ -72,6 +72,16 @@ int main(){
             }
         }
         pdcpUplinkEntity.receive_PDU(serializedPacket);
+        
+        std::vector<uint8_t> compreesedPacket = pdcpUplinkEntity.compress_header(arrival_time);
+        std::cout<<"\n The ROHC compressed IP-Packet \n"<<std::endl;
+        for(size_t i =0; i< compreesedPacket.size(); i++){
+            std::printf(" 0x%02x", compreesedPacket[i]);
+            if(i != 0 && ((i+1)%8 == 0)){
+                std::printf("\n");
+            }
+        }
+
         int packetSize = serializedPacket.size();
         std::cout<<"\nThe packet variable size is "<< packetSize<<std::endl;
         std::vector<uint8_t> cipheredMessage =pdcpUplinkEntity.pdcpCipher(serializedPacket, packetSize, key);
@@ -82,16 +92,7 @@ int main(){
                 std::printf("\n");
             }
         }
-        std::vector<uint8_t> compreesedPacket = pdcpUplinkEntity.compress_header(arrival_time);
-        std::cout<<"\n The ROHC compressed IP-Packet \n"<<std::endl;
-        for(size_t i =0; i< compreesedPacket.size(); i++){
-            std::printf(" 0x%02x", compreesedPacket[i]);
-            if(i != 0 && ((i+1)%8 == 0)){
-                std::printf("\n");
-            }
-        }
-        
-        std::vector<uint8_t> pdu = pdcpUplinkEntity.processPDU(compreesedPacket);
+        std::vector<uint8_t> pdu = pdcpUplinkEntity.processPDU(cipheredMessage);
         std::vector<uint8_t> SDU = pdcpDownlinkEntity.removePDCPHeader(pdu);
         std::cout<<"\n The IP-Packet without the PDCP header \n"<<std::endl;
         for (uint8_t i =0 ; i < SDU.size(); i++){
@@ -109,7 +110,7 @@ int main(){
                 std::printf("\n");
             }
         }
-        std::vector<uint8_t> processedSDU = pdcpDownlinkEntity.processSDU(SDU);
+        std::vector<uint8_t> processedSDU = pdcpDownlinkEntity.processSDU(decipheredMessage);
         pdcpDownlinkEntity.addToRX_BUFFER(processedSDU);
         std::vector<uint8_t> decompressedpacket = pdcpDownlinkEntity.decompressHeader(arrival_time);
         std::cout<<"\n The decompressed IP-Packet \n"<<std::endl;
