@@ -12,7 +12,7 @@ Simply include the header file in your source code:
 #include "profiler.h"
 ```
 
-### If the Profiler is in a Different Directory:
+### 2. If the Profiler is in a Different Directory:
 To include the profiler.h from another directory, you need to specify the relative path in the #include directive. For example, if the profiler.h file is in the libs/profiler directory relative to your source code, include it like this:
 
 ```cpp
@@ -54,15 +54,13 @@ int main() {
 ```
 
 ## Explanation:
-Start Profiling:
 
 ### 1. Start Profiling:
 Use the start() method before the code block you want to measure.
-Stop Profiling:
 
 ### 2. Stop Profiling:
 Use the stop() method after the code block you want to measure. This will record the time elapsed.
-Get the Average Time:
+
 
 ### 3. Get the Average Time:
 Use the average_time() method to get the average time in microseconds for all the measurements.
@@ -71,7 +69,7 @@ Use the average_time() method to get the average time in microseconds for all th
 The reset() method will clear the accumulated time and count, allowing for a new profiling session.
 
 ## Methods in Profiler Class
-`start()`: Starts the timer for the code block to be profiled.
-`stop()`: Stops the timer and adds the elapsed time to the total time.
-`average_time()`: Returns the average time in microseconds for the profiled code block. If no profiling has been done, it returns 0.0.
+`start()`: Starts the timer for the code block to be profiled.  
+`stop()`: Stops the timer and adds the elapsed time to the total time.  
+`average_time()`: Returns the average time in microseconds for the profiled code block. If no profiling has been done, it returns 0.0.  
 `reset()`: Resets the accumulated time and count, allowing for a new profiling session.
