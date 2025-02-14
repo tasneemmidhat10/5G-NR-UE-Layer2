@@ -50,6 +50,7 @@ int main() {
             for (uint16_t offset = 0; offset < sdu_size; offset += segment_size) {
                 UmdPdu pdu{
                     .si = (offset == 0) ? (uint8_t)0b01 : (offset + segment_size >= sdu_size) ? (uint8_t)0b10 : (uint8_t)0b11,
+		    .reserved = 0,
                     .sn = 0,
                     .so = (offset),
                     .data = std::vector<uint8_t>(

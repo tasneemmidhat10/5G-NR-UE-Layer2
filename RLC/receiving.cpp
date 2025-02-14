@@ -128,7 +128,6 @@ void ReceivingUmRlcEntity::manageReassemblyTimer() {
 }
 
 void ReceivingUmRlcEntity::updateReassemblyWindow() {
-    const uint16_t window_start = (state.rx_next_highest + 64 - state.um_window_size) % 64;
     auto it = state.reassembly_buffer.begin();
     while (it != state.reassembly_buffer.end()) {
         if (!isInsideReassemblyWindow(it->first)) {

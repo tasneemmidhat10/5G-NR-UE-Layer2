@@ -15,6 +15,7 @@ int main() {
     // Simulate receiving PDUs
     UmdPdu pdu1{
         .si = 0b01,  // First segment
+	.reserved = 0,
         .sn = 0,
         .so = 0,
         .data = {0x01, 0x02, 0x03}
@@ -22,6 +23,7 @@ int main() {
 
     UmdPdu pdu2{
         .si = 0b10,  // Last segment
+	.reserved = 0,
         .sn = 0,
         .so = 3,
         .data = {0x04, 0x05, 0x06, 0x07, 0x08}
