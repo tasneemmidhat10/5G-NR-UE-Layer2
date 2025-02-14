@@ -1,4 +1,4 @@
-# Profiler Library
+# Profiler
 
 This is a simple profiling utility class in C++ that allows you to measure the execution time of code blocks in microseconds.
 
