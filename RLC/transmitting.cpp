@@ -7,7 +7,8 @@ TransmittingUmRlcEntity::TransmittingUmRlcEntity() : state{0} {}
 void TransmittingUmRlcEntity::transmitSdu(const RlcSdu& sdu, size_t segmentSize) {
     // Assign SN to the SDU
     uint16_t sn = state.txNext;
-    state.txNext = (state.txNext + 1) % (1 << 6);  // 6-bit SN (mod 64)
+    if (sdu.size() > segmentSize)
+    	state.txNext = (state.txNext + 1) % (1 << 6);  // 6-bit SN (mod 64)
 
     // Segment the SDU based on the segment size and generate UMD PDUs
     std::vector<UmdPdu> umdPdus = generateUmdPdus(sdu, sn, segmentSize);
@@ -48,5 +49,6 @@ std::vector<UmdPdu> TransmittingUmRlcEntity::generateUmdPdus(const RlcSdu& sdu, 
 
 // Function to submit UMD PDUs to the lower layer (MAC)
 void TransmittingUmRlcEntity::submitToLowerLayer(const UmdPdu& pdu) {
-    std::cout << "Transmitting PDU: SN=" << pdu.sn << ", SO=" << pdu.so << ", SI=" << static_cast<int>(pdu.si) << "\n";
+    if (pdu.si != 0b00)
+    	std::cout << "Transmitting PDU: SN=" << pdu.sn << ", SO=" << pdu.so << ", SI=" << static_cast<int>(pdu.si) << "\n";
 }
