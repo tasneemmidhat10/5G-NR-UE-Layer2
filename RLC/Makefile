@@ -1,29 +1,29 @@
-CXX = g++
+CXX = g++.exe
 CXXFLAGS = -std=c++17 -pthread -Wall -Wextra -Werror
-AR = ar
+AR = ar.exe
 ARFLAGS = rcs
 
 SRC = transmitting.cpp receiving.cpp
 OBJ = $(SRC:.cpp=.o)
-LIB = librlc.a
+LIB = rlc.lib
 
 # Targets
-all: rlc_sim profiler
+all: main.exe profiler.exe
 
 # Create static library
 $(LIB): $(OBJ)
 	$(AR) $(ARFLAGS) $(LIB) $(OBJ)
-	rm -f $(OBJ)  # Clean object files after creating the library
+	del /F /Q $(OBJ)  # Clean object files after creating the library
 
 # Compile main executable
-rlc_sim: main.o $(LIB)
-	$(CXX) $(CXXFLAGS) -o rlc_sim main.o $(LIB)
-	rm -f main.o
+main.exe: main.o $(LIB)
+	$(CXX) $(CXXFLAGS) -o main.exe main.o $(LIB)
+	del /F /Q main.o
 
 # Compile profiler executable
-profiler: profiler.o $(LIB)
-	$(CXX) $(CXXFLAGS) -o profiler profiler.o $(LIB)
-	rm -f profiler.o
+profiler.exe: profiler.o $(LIB)
+	$(CXX) $(CXXFLAGS) -o profiler.exe profiler.o $(LIB)
+	del /F /Q profiler.o
 
 # Compile object files
 %.o: %.cpp
@@ -31,5 +31,4 @@ profiler: profiler.o $(LIB)
 
 # Clean up
 clean:
-	rm -f *.o *.a rlc_sim profiler
-
+	del /F /Q *.o *.lib *.exe
