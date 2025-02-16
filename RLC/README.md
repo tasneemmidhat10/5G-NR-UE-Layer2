@@ -1,52 +1,46 @@
-# RLC Layer Simulation
+# RLC Layer Implementation
 
-This directory contains an implementation of the 5G NR RLC (Radio Link Control) Layer. It includes transmitting and receiving entities and provides a profiling tool to measure performance.
+## Prerequisites
 
-## Compilation and Usage
+- Windows operating system
+- C++ compiler (g++)
+- Make build system
 
-### Prerequisites
-Ensure you have the following installed:
-- `g++` (supporting C++17)
-- `make`
+## Project Structure
 
-### Compilation
-To compile the project, run:
-```sh
-make
 ```
-This will generate:
-- `rlc_sim`: The main simulation executable
-- `profiler`: The profiling tool
-- `librlc.a`: A static library containing the compiled transmitting and receiving logic
-
-### Running the Simulation
-To run the main simulation:
-```sh
-./rlc_sim
+.
+├── librlc.a        - Static library containing core RLC functionality
+├── main.cpp        - Entry point for the simulation
+├── Makefile        - Build configuration
+├── profiler.cpp    - Performance measurement tool
+├── README.md       - This documentation
+├── receiving.cpp   - RLC receiving entity implementation
+├── rlc_um.h       - Main header file for RLC UM mode
+└── transmitting.cpp- RLC transmitting entity implementation
 ```
 
-To run the profiler:
-```sh
-./profiler
-```
+## Installation Guide
 
-### Cleaning Up
-To remove compiled files and executables:
-```sh
-make clean
-```
+### 1. Setting up the Build Environment
 
-## File Structure
-- `main.cpp` - Entry point for the simulation.
-- `profiler.cpp` - Measures the performance of RLC layer functions.
-- `transmitting.cpp` - Handles RLC transmitting logic.
-- `receiving.cpp` - Handles RLC receiving logic.
-- `rlc_um.h` - The only header file, which includes the necessary headers for both transmitting and receiving logic.
-- `Makefile` - Build script for compiling the project.
+Follow the main project readme for setting up Chocolatey and Make.
 
-## Notes
-- The project uses multithreading with `std::thread` for handling timed events in receiving.
-- A static library (`librlc.a`) is created to avoid recompiling common components each time.
-- The current implementation only includes the UM (Unacknowledged Mode) entity.
-- Future improvements include adding support for the AM (Acknowledged Mode) entity.
+### 2. Building the Project
 
+1. Navigate to RLC directory:
+
+   ```bash
+   cd RLC
+   ```
+
+2. Build commands:
+   ```bash
+   make        # Build the project
+   ./main      # Run the application
+   make clean  # Clean build files
+   ```
+
+## Troubleshooting
+
+See the main project readme for common issues and solutions.
