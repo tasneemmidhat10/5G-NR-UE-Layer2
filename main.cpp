@@ -7,15 +7,30 @@
 #include <queue>
 #include <vector>
 #include <string>
+#include <stdlib.h>
+
+// Global queue definitions
+std::queue<IpPacket> ip_packet_queue;
+std::queue<UmdPdu> rlc_to_mac_queue;
+std::queue<UmdPdu> mac_to_rlc_queue;
+std::queue<std::vector<MacPDU>> mac_to_phy_queue;
+std::queue<std::vector<MacPDU>> phy_to_mac_queue;
+std::queue<std::vector<uint8_t>> pdcp_to_rlc_queue;
+std::queue<std::vector<uint8_t>> rlc_to_pdcp_queue;
+
+int SEGMENT_SIZE = 3;            // default value
+int PAYLOAD_DATA_SIZE = 18;      // default value
+int TRANSPORT_BLOCK_SIZE = 1024; // default value
+
+std::vector<ProfilingResult> profilingResults;
 
 void ipPacketGenerator()
 {
     std::cout << "\n IpPacketGenerator UPLINK START =========================================== \n"
               << std::endl;
 
-    uint16_t length = 18;
     // Generate a random IP packet with 18 bytes of payload data
-    IpPacket ippacket = RandomIpPacketGenerator::generateRandomIpPacket(18);
+    IpPacket ippacket = RandomIpPacketGenerator::generateRandomIpPacket(PAYLOAD_DATA_SIZE);
     ip_packet_queue.push(ippacket);
 
     // Display the details of the generated packet
@@ -296,7 +311,9 @@ void profileLayer(void (*layer)(), std::string layerName, std::string direction)
     profiler.start();
     layer();
     profiler.stop();
-    std::cout << "\n\n======== " << layerName << " took " << profiler.average_time() << " milliseconds for " << direction << " ========\n\n";
+    double avgTime = profiler.average_time();
+    std::cout << "\n\n======== " << layerName << " took " << avgTime << " milliseconds for " << direction << " ========\n\n";
+    profilingResults.push_back({layerName, direction, avgTime});
     profiler.reset();
 }
 
@@ -313,7 +330,6 @@ void downLink()
     std::cout << "\n\n======== Downlink took " << profiler.average_time() << " milliseconds ========\n\n";
 }
 
-
 void upLink()
 {
     Profiler profiler;
@@ -328,9 +344,43 @@ void upLink()
     std::cout << "\n======== Uplink took " << profiler.average_time() << " milliseconds ========\n";
 }
 
-int main()
+std::string getArgValue(int argc, char *argv[], const std::string &argName)
 {
+    std::string prefix = "--" + argName + "=";
+    for (int i = 1; i < argc; i++)
+    {
+        std::string arg = argv[i];
+        if (arg.substr(0, prefix.length()) == prefix)
+        {
+            return arg.substr(prefix.length());
+        }
+    }
+    return "";
+}
+
+int main(int argc, char *argv[])
+{
+    // Parse named command line arguments
+    std::string segmentSize = getArgValue(argc, argv, "segment_size");
+    std::string payloadSize = getArgValue(argc, argv, "payload_data_size");
+    std::string transportBlockSize = getArgValue(argc, argv, "transport_block_size");
+
+    if (!segmentSize.empty())
+    {
+        SEGMENT_SIZE = std::stoi(segmentSize);
+    }
+    if (!payloadSize.empty())
+    {
+        PAYLOAD_DATA_SIZE = std::stoi(payloadSize);
+    }
+    if (!transportBlockSize.empty())
+    {
+        TRANSPORT_BLOCK_SIZE = std::stoi(transportBlockSize);
+    }
+
     std::cout << "\n ================= Starting simulation... =================" << std::endl;
+    std::cout << "Using SEGMENT_SIZE: " << SEGMENT_SIZE << ", PAYLOAD_DATA_SIZE: " << PAYLOAD_DATA_SIZE << ", TRANSPORT_BLOCK_SIZE: " << TRANSPORT_BLOCK_SIZE << std::endl;
+
     initializePDCPKeys();
     std::cout << "\n ================ Starting uplink simulation... ================" << std::endl;
     upLink();
@@ -339,6 +389,8 @@ int main()
     downLink();
 
     std::cout << "\n ================= Simulation complete! =================" << std::endl;
+
+    printSummaryTable(profilingResults, SEGMENT_SIZE, PAYLOAD_DATA_SIZE, TRANSPORT_BLOCK_SIZE);
 
     return 0;
 }

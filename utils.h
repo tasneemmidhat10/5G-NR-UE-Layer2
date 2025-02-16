@@ -4,6 +4,8 @@
 #include <queue>
 #include <vector>
 #include <string>
+#include <iostream>
+#include <iomanip>
 
 #define LOSS_PROBABILITY 0.01
 
@@ -54,6 +56,46 @@ bool SimulateLoss()
     srand(time(0));
     float randomValue = (float)rand() / RAND_MAX;
     return randomValue < LOSS_PROBABILITY;
+}
+
+struct ProfilingResult
+{
+    std::string layerName;
+    std::string direction;
+    double time;
+};
+
+void printSummaryTable(const std::vector<ProfilingResult> &results, int segmentSize, int payloadSize, int transportBlockSize)
+{
+    std::cout << "\n==================== Simulation Summary ====================\n";
+    std::cout << "Configuration:\n";
+    std::cout << "  Segment Size: " << segmentSize << " bytes\n";
+    std::cout << "  Payload Data Size: " << payloadSize << " bytes\n";
+    std::cout << "  Transport Block Size: " << transportBlockSize << " bytes\n\n";
+
+    std::cout << "Layer Processing Times:\n";
+    std::cout << std::setfill('-') << std::setw(65) << "-" << std::endl;
+    std::cout << std::setfill(' ');
+    std::cout << std::left << std::setw(20) << "Layer"
+              << std::setw(15) << "Direction"
+              << std::setw(20) << "Time (ms)" << std::endl;
+    std::cout << std::setfill('-') << std::setw(65) << "-" << std::endl;
+    std::cout << std::setfill(' ');
+
+    double totalTime = 0;
+    for (const auto &result : results)
+    {
+        std::cout << std::left << std::setw(20) << result.layerName
+                  << std::setw(15) << result.direction
+                  << std::fixed << std::setprecision(3) << result.time << std::endl;
+        totalTime += result.time;
+    }
+
+    std::cout << std::setfill('-') << std::setw(65) << "-" << std::endl;
+    std::cout << std::setfill(' ');
+    std::cout << std::left << std::setw(35) << "Total Processing Time:"
+              << std::fixed << std::setprecision(3) << totalTime << " ms" << std::endl;
+    std::cout << std::setfill('-') << std::setw(65) << "-" << std::endl;
 }
 
 #endif // UTILS_H

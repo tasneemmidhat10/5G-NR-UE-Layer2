@@ -3,23 +3,14 @@
 
 #include <queue>
 #include <vector>
-#include <cstdint>
 #include <iostream>
 #include <iomanip>
-#include "../RLC/rlc_um.h"
-
-struct MacPDU
-{
-    uint16_t length; // Length of the MAC PDU
-    UmdPdu data;     // Payload (RLC SDU or segment)
-};
+#include "mac_pdu.h"
+#include "../main.h"
 
 class MAC
 {
 public:
-    // Transport Block Size configuration (adjust in header)
-    static constexpr size_t TRANSPORT_BLOCK_SIZE = 1024; // 32 bytes example
-
     // Initialize with input and output queues
     MAC(std::queue<UmdPdu> *rlc_queue,
         std::queue<std::vector<MacPDU>> *phy_queue);

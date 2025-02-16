@@ -112,10 +112,39 @@ This project implements Layer 2 functionalities of a 5G NR UE (User Equipment) i
    ```
 
 3. Build commands:
+
    ```bash
    make        # Build the project
    make run    # Run the application
    ```
+
+4. Running the application:
+
+   ```bash
+   # Run with default values (SEGMENT_SIZE=3, PAYLOAD_DATA_SIZE=18, TRANSPORT_BLOCK_SIZE=1024)
+   make run
+
+   # Run with custom segment size
+   make run SEGMENT_SIZE=5
+
+   # Run with custom payload data size
+   make run PAYLOAD_DATA_SIZE=30
+
+   # Run with custom transport block size
+   make run TRANSPORT_BLOCK_SIZE=2048
+
+   # Run with multiple custom values
+   make run SEGMENT_SIZE=5 PAYLOAD_DATA_SIZE=30 TRANSPORT_BLOCK_SIZE=2048
+
+   # Or run directly with the executable
+   ./main --segment_size=5 --payload_data_size=30 --transport_block_size=2048
+   ```
+
+   Available arguments:
+
+   - `--segment_size`: Sets the RLC segmentation size (default: 3)
+   - `--payload_data_size`: Sets the IP packet payload size in bytes (default: 18)
+   - `--transport_block_size`: Sets the MAC transport block size in bytes (default: 1024)
 
 ### 4. Running Individual Layers
 

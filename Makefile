@@ -17,7 +17,12 @@ SRCS = main.cpp \
 
 OBJS = $(SRCS:.cpp=.o)
 
-$(TARGET): $(OBJS)
+# Default values for arguments
+SEGMENT_SIZE ?= 3
+PAYLOAD_DATA_SIZE ?= 18
+TRANSPORT_BLOCK_SIZE ?= 1024
+
+$(TARGET): clean $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) $(LIBS) -o $(TARGET)
 
 %.o: %.cpp
@@ -26,7 +31,7 @@ $(TARGET): $(OBJS)
 .PHONY: clean run
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	del /Q /F main.exe main.o PDCP\PDCP.o IpPacketGenerator\IpHeader.o IpPacketGenerator\IpPacket.o IpPacketGenerator\RandomIpPacketGenerator.o RLC\receiving.o RLC\transmitting.o MAC\mac_layer.o 2>nul || exit 0
 
 run: $(TARGET)
-	./$(TARGET)
+	./$(TARGET) --segment_size=$(SEGMENT_SIZE) --payload_data_size=$(PAYLOAD_DATA_SIZE) --transport_block_size=$(TRANSPORT_BLOCK_SIZE)

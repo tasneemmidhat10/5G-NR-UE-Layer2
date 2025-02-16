@@ -36,7 +36,7 @@ void MAC::mac_multiplexing()
         std::vector<MacPDU> transportBlock;
         MacPDU mac_pdu;
 
-        size_t remaining = TRANSPORT_BLOCK_SIZE;
+        size_t remaining = TRANSPORT_BLOCK_SIZE; // Now using global variable
 
         while (!rlc_queue_->empty() && remaining > 2)
         {
