@@ -1,6 +1,7 @@
 #include "main.h"
 #include "utils.h"
 #include "pdcp_config.h"
+#include "Profiler/profiler.h"
 
 #include <iomanip>
 #include <queue>
@@ -288,19 +289,43 @@ void PDCPLayerDownlink()
     }
 }
 
+void profileLayer(void (*layer)(), std::string layerName, std::string direction)
+{
+    Profiler profiler;
+
+    profiler.start();
+    layer();
+    profiler.stop();
+    std::cout << "\n\n======== " << layerName << " took " << profiler.average_time() << " milliseconds for " << direction << " ========\n\n";
+    profiler.reset();
+}
+
 void downLink()
 {
-    MACLayerDownlink();
-    RLCLayerDownlink();
-    PDCPLayerDownlink();
+    Profiler profiler;
+    profiler.start();
+
+    profileLayer(MACLayerDownlink, "MACLayer", "Downlink");
+    profileLayer(RLCLayerDownlink, "RLCLayer", "Downlink");
+    profileLayer(PDCPLayerDownlink, "MACLayer", "Downlink");
+
+    profiler.stop();
+    std::cout << "\n\n======== Downlink took " << profiler.average_time() << " milliseconds ========\n\n";
 }
+
 
 void upLink()
 {
-    ipPacketGenerator();
-    PDCPLayerUplink();
-    RLCLayerUplink();
-    macLayerUplink();
+    Profiler profiler;
+    profiler.start();
+
+    profileLayer(ipPacketGenerator, "ipPacketGenerator", "uplink");
+    profileLayer(PDCPLayerUplink, "PDCPLayer", "uplink");
+    profileLayer(RLCLayerUplink, "RLCLayer", "uplink");
+    profileLayer(macLayerUplink, "macLayer", "uplink");
+
+    profiler.stop();
+    std::cout << "\n======== Uplink took " << profiler.average_time() << " milliseconds ========\n";
 }
 
 int main()
