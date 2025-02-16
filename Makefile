@@ -1,7 +1,7 @@
 CXX = g++
-CXXFLAGS = -w -std=c++17 -pthread -I. -I ./rohc-windows/include
+CXXFLAGS = -w -std=c++17 -pthread -I. -I ./rohc-windows/include -I ./OpenSSL-Win64/include
 
-LDFLAGS = -L ./rohc-windows/lib
+LDFLAGS = -L ./rohc-windows/lib -L ./OpenSSL-Win64/lib
 LIBS = -lrohc -lws2_32 -lssl -lcrypto
 
 TARGET = main
