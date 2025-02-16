@@ -1,0 +1,10 @@
+prefix=/home/tasneemmidhat10/rohc-windows
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: RObust Header Compression (ROHC)
+Description: Free and efficient library that implements the ROHC protocol
+Version: 2.4.0
+Libs: -L${libdir} -lrohc -lws2_32
+Cflags: -I${includedir}
