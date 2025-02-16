@@ -83,17 +83,29 @@ void printSummaryTable(const std::vector<ProfilingResult> &results, int segmentS
     std::cout << std::setfill(' ');
 
     double totalTime = 0;
+    double uplinkTotal = 0;
+    double downlinkTotal = 0;
+
     for (const auto &result : results)
     {
         std::cout << std::left << std::setw(20) << result.layerName
                   << std::setw(15) << result.direction
                   << std::fixed << std::setprecision(3) << result.time << std::endl;
         totalTime += result.time;
+
+        if (result.direction == "uplink")
+            uplinkTotal += result.time;
+        else if (result.direction == "Downlink")
+            downlinkTotal += result.time;
     }
 
     std::cout << std::setfill('-') << std::setw(65) << "-" << std::endl;
     std::cout << std::setfill(' ');
-    std::cout << std::left << std::setw(35) << "Total Processing Time:"
+    std::cout << std::left << std::setw(35) << "Uplink Total Time:"
+              << std::fixed << std::setprecision(3) << uplinkTotal << " ms" << std::endl;
+    std::cout << std::left << std::setw(35) << "Downlink Total Time:"
+              << std::fixed << std::setprecision(3) << downlinkTotal << " ms" << std::endl;
+    std::cout << std::left << std::setw(35) << "Combined Total Time:"
               << std::fixed << std::setprecision(3) << totalTime << " ms" << std::endl;
     std::cout << std::setfill('-') << std::setw(65) << "-" << std::endl;
 }
