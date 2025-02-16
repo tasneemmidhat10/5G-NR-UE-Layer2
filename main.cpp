@@ -307,7 +307,7 @@ void downLink()
 
     profileLayer(MACLayerDownlink, "MACLayer", "Downlink");
     profileLayer(RLCLayerDownlink, "RLCLayer", "Downlink");
-    profileLayer(PDCPLayerDownlink, "MACLayer", "Downlink");
+    profileLayer(PDCPLayerDownlink, "PDCP", "Downlink");
 
     profiler.stop();
     std::cout << "\n\n======== Downlink took " << profiler.average_time() << " milliseconds ========\n\n";
